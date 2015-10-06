@@ -51,5 +51,7 @@ namespace Chronometer
 			count = 0;
 			ShowCount ();
 		}
+
+
 	}
 }
