@@ -15,8 +15,9 @@ namespace Chronometer
 
 		TextView timeView;
 		Button startStop, reset;
+		ISharedPreferences sharedPreferences;
 
-		int count = 0;
+		int time = 0;
 
 		void InitUIReferences ()
 		{
@@ -37,21 +38,36 @@ namespace Chronometer
 			startStop.Click += (sender, eventArgs) => Increment ();
 			reset.Click += (sender, e) => Reset();
 
+			sharedPreferences = GetPreferences (FileCreationMode.Private);
+
 			ShowCount ();
 		}
 
-		void ShowCount () { timeView.Text = count.ToString(); }
+		void ShowCount () { timeView.Text = time.ToString(); }
 
 		void Increment() {
-			count++;
+			time++;
 			ShowCount ();
 		}
 
 		void Reset() {
-			count = 0;
+			time = 0;
 			ShowCount ();
 		}
+			
+		protected override void OnPause ()
+		{
+			base.OnPause ();
+			ISharedPreferencesEditor editor = sharedPreferences.Edit ();
+			editor.PutInt ("time", time);
+			editor.Commit ();
+		}
 
-
+		protected override void OnResume ()
+		{
+			base.OnResume ();
+			time = sharedPreferences.GetInt("time", 0);
+			ShowCount ();
+		}
 	}
 }
