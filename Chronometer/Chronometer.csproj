@@ -62,9 +62,11 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\Icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\Icon.png" />
     <AndroidResource Include="Resources\values-fr\Strings.xml" />
+    <AndroidResource Include="Resources\layout-land\Main.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Resources\values-fr\" />
+    <Folder Include="Resources\layout-land\" />
   </ItemGroup>
 </Project>

@@ -11,15 +11,25 @@
         android:layout_height="wrap_content"
         android:id="@+id/timeView"
         android:gravity="center"
-        android:layout_gravity="center" />
-    <Button
-        android:text="Start - Stop"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:textSize="?android:attr/windowTitleSize" />
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/startStopButton" />
-    <Button
-        android:text="@string/reset"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/resetButton" />
+        android:id="@+id/linearLayout1">
+        <Button
+            android:text="Start - Stop"
+            android:id="@+id/startStopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+        <Button
+            android:text="@string/reset"
+            android:id="@+id/resetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
 </LinearLayout>
