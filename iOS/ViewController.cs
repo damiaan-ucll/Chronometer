@@ -8,12 +8,9 @@ namespace Chronometer.iOS
 	{
 		Chronometer chrono = new Chronometer (80);
 
-		public ViewController (IntPtr handle) : base (handle)
-		{		
-		}
+		public ViewController (IntPtr handle) : base (handle) {}
 
-		public override void ViewDidLoad ()
-		{
+		public override void ViewDidLoad () {
 			base.ViewDidLoad ();
 
 			// Code to start the Xamarin Test Cloud Agent
@@ -22,6 +19,8 @@ namespace Chronometer.iOS
 			#endif
 
 			chrono.Timer.Elapsed += (sender, e) => InvokeOnMainThread(() => Time.Text = chrono.Time.ToString(@"hh\:mm\:ss\:fff"));
+
+			Time.Font = UIFont.MonospacedDigitSystemFontOfSize (26, UIFontWeight.Regular);
 
 			StartStop.TouchUpInside += delegate {
 				chrono.StartStop();
@@ -34,7 +33,5 @@ namespace Chronometer.iOS
 				Time.Text = chrono.Time.ToString(@"hh\:mm\:ss\:fff");
 			};
 		}
-
-
 	}
 }
