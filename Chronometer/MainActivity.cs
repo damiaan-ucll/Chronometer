@@ -28,11 +28,11 @@ namespace Chronometer.Droid
 
 			startStop.Click += delegate {
 				chrono.StartStop();
-				startStop.Text = chrono.isTicking ? "Stop" : "Start";
+				UpdateStartStopButtonText();
 			};
 			reset.Click += delegate {
 				chrono.Reset();
-				startStop.Text = "Start";
+				startStop.Text = Resources.GetText(Resource.String.start);
 				UpdateTextField();
 			};
 
@@ -48,9 +48,12 @@ namespace Chronometer.Droid
 		}
 
 
-		void UpdateTextField ()
-		{
+		void UpdateTextField (){
 			timeView.Text = chrono.Time.ToString(@"hh\:mm\:ss\:fff");
+		}
+
+		void UpdateStartStopButtonText() {
+			startStop.Text = chrono.isTicking ? Resources.GetText(Resource.String.stop) : Resources.GetText(Resource.String.start);
 		}
 			
 		protected override void OnPause () {
@@ -84,6 +87,7 @@ namespace Chronometer.Droid
 			chrono.importStartPauseTimes (start, pause);
 
 			UpdateTextField ();
+			UpdateStartStopButtonText ();
 		}
 	}
 }
