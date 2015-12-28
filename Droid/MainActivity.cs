@@ -14,7 +14,7 @@ namespace Chronometer.Droid
 		Button startStop, reset;
 		ISharedPreferences sharedPreferences;
 
-		private readonly Chronometer chrono = new Chronometer(100);
+		private readonly Chronometer chrono = new Chronometer(80);
 
 		protected override void OnCreate (Bundle savedInstanceState) {
 			base.OnCreate (savedInstanceState);

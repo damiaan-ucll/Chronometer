@@ -18,8 +18,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jBK-zj-dwr">
-                                <rect key="frame" x="215" y="312.5" width="81" height="30"/>
-                                <state key="normal" title="Start - Stop"/>
+                                <rect key="frame" x="239" y="312.5" width="34" height="30"/>
+                                <state key="normal" title="Start"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w3M-o5-VRn">
                                 <rect key="frame" x="304" y="312.5" width="39" height="30"/>

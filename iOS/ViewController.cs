@@ -13,11 +13,6 @@ namespace Chronometer.iOS
 		public override void ViewDidLoad () {
 			base.ViewDidLoad ();
 
-			// Code to start the Xamarin Test Cloud Agent
-			#if ENABLE_TEST_CLOUD
-			Xamarin.Calabash.Start ();
-			#endif
-
 			chrono.Timer.Elapsed += (sender, e) => InvokeOnMainThread(() => Time.Text = chrono.Time.ToString(@"hh\:mm\:ss\:fff"));
 
 			Time.Font = UIFont.MonospacedDigitSystemFontOfSize (26, UIFontWeight.Regular);
