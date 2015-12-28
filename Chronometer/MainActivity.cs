@@ -23,7 +23,6 @@ namespace Chronometer
 		private DateTime? startTime = null;
 		private DateTime? pauseTime = null;
 		private Handler handler;
-		private Action tickAction;
 		private duration calculateDuration = zeroDuration;
 
 		private Boolean isTicking {
@@ -47,7 +46,6 @@ namespace Chronometer
 			SetContentView (Resource.Layout.Main);
 
 			InitUIReferences ();
-			tickAction = OnTick;
 
 			startStop.Click += (sender, e) => toggleState();
 			reset.Click += (sender, e) => ResetTimer();
@@ -73,7 +71,7 @@ namespace Chronometer
 				startTime = DateTime.Now;
 			}
 			calculateDuration = durationWhenTicking;
-			GenerateDelayedTick ();
+			OnTick();
 
 			startStop.Text = Resources.GetText(Resource.String.stop);
 		}
@@ -83,6 +81,7 @@ namespace Chronometer
 			pauseTime = DateTime.Now;
 
 			startStop.Text = Resources.GetText(Resource.String.start);
+			handler.RemoveCallbacksAndMessages(null);
 		}
 
 		private void ResetTimer() {
@@ -101,7 +100,7 @@ namespace Chronometer
 		}
 
 		private void GenerateDelayedTick() {
-			handler.PostDelayed(tickAction, 100);
+			handler.PostDelayed(OnTick, 100);
 		}
 
 		private void OnTick()
@@ -109,8 +108,7 @@ namespace Chronometer
 			UpdateTextField();
 
 			// Have the next tick generated in 100ms
-			if (isTicking)
-				GenerateDelayedTick();
+			GenerateDelayedTick();
 		}
 
 		private TimeSpan durationWhenTicking() {
@@ -148,7 +146,7 @@ namespace Chronometer
 				pauseTime = DateTime.FromBinary (sharedPreferences.GetLong ("pause", DateTime.Now.ToBinary ()));
 			else
 				pauseTime = null;
-			GenerateDelayedTick ();
+			OnTick ();
 
 			if (pauseTime != null)
 				calculateDuration = durationWhenPaused;
