@@ -33,10 +33,10 @@ namespace Chronometer.Droid
 			reset.Click += delegate {
 				chrono.Reset();
 				startStop.Text = Resources.GetText(Resource.String.start);
-				UpdateTextField();
+				UpdateTimeField();
 			};
 
-			chrono.Timer.Elapsed += (sender, e) => RunOnUiThread(() => UpdateTextField());
+			chrono.Timer.Elapsed += (sender, e) => RunOnUiThread(() => UpdateTimeField());
 
 			sharedPreferences = GetPreferences (FileCreationMode.Private);
 		}
@@ -48,7 +48,7 @@ namespace Chronometer.Droid
 		}
 
 
-		void UpdateTextField (){
+		void UpdateTimeField (){
 			timeView.Text = chrono.Time.ToString(@"hh\:mm\:ss\:fff");
 		}
 
@@ -86,7 +86,7 @@ namespace Chronometer.Droid
 
 			chrono.importStartPauseTimes (start, pause);
 
-			UpdateTextField ();
+			UpdateTimeField ();
 			UpdateStartStopButtonText ();
 		}
 	}
