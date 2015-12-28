@@ -6,7 +6,7 @@ namespace Chronometer.iOS
 {
 	public partial class ViewController : UIViewController
 	{
-		int count = 1;
+		Chronometer chrono = new Chronometer (80);
 
 		public ViewController (IntPtr handle) : base (handle)
 		{		
@@ -21,18 +21,20 @@ namespace Chronometer.iOS
 			Xamarin.Calabash.Start ();
 			#endif
 
-			// Perform any additional setup after loading the view, typically from a nib.
-			Button.AccessibilityIdentifier = "myButton";
-			Button.TouchUpInside += delegate {
-				var title = string.Format ("{0} clicks!", count++);
-				Button.SetTitle (title, UIControlState.Normal);
+			chrono.Timer.Elapsed += (sender, e) => InvokeOnMainThread(() => Time.Text = chrono.Time.ToString(@"hh\:mm\:ss\:fff"));
+
+			StartStop.TouchUpInside += delegate {
+				chrono.StartStop();
+				StartStop.SetTitle(chrono.isTicking ? "Stop" : "Start", UIControlState.Normal);
+			};
+
+			Reset.TouchUpInside += delegate {
+				chrono.Reset();
+				StartStop.SetTitle("Start", UIControlState.Normal);
+				Time.Text = chrono.Time.ToString(@"hh\:mm\:ss\:fff");
 			};
 		}
 
-		public override void DidReceiveMemoryWarning ()
-		{		
-			base.DidReceiveMemoryWarning ();		
-			// Release any cached data, images, etc that aren't in use.		
-		}
+
 	}
 }
