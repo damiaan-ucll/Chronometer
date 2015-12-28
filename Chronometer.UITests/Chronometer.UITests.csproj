@@ -37,9 +37,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chronometer\Chronometer.csproj">
+    <ProjectReference Include="..\Chronometer\Droid.csproj">
       <Project>{821ED8E2-8E71-4F0F-804B-174C9FE69D60}</Project>
-      <Name>Chronometer</Name>
+      <Name>Droid</Name>
       <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
       <Private>False</Private>
     </ProjectReference>

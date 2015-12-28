@@ -2,158 +2,88 @@
 
 using Android.App;
 using Android.Content;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using Android.OS;
 
-public delegate TimeSpan duration();
+using Chronometer.Core;
 
-namespace Chronometer
+namespace Chronometer.Droid
 {
 	[Activity (Label = "Chronometer", MainLauncher = true, Icon = "@drawable/icon")]
 	public class MainActivity : Activity
 	{
-		public static duration zeroDuration = () => new TimeSpan(0);
-
 		TextView timeView;
 		Button startStop, reset;
 		ISharedPreferences sharedPreferences;
 
-		private DateTime? startTime = null;
-		private DateTime? pauseTime = null;
-		private Handler handler;
-		private duration calculateDuration = zeroDuration;
+		private readonly Core.Chronometer chrono = new Core.Chronometer(100);
 
-		private Boolean isTicking {
-			get {
-				return startTime != null && pauseTime == null;
-			}
-		}
-
-		void InitUIReferences () {
-			timeView = FindViewById<TextView> (Resource.Id.timeView);
-			startStop = FindViewById<Button> (Resource.Id.startStopButton);
-			reset = FindViewById<Button> (Resource.Id.resetButton);
-
-			handler = new Handler ();
-		}
-
-		protected override void OnCreate (Bundle bundle) {
-			base.OnCreate (bundle);
+		protected override void OnCreate (Bundle savedInstanceState) {
+			base.OnCreate (savedInstanceState);
 
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
 
 			InitUIReferences ();
 
-			startStop.Click += (sender, e) => toggleState();
-			reset.Click += (sender, e) => ResetTimer();
+			startStop.Click += delegate {
+				chrono.StartStop();
+				startStop.Text = chrono.isTicking ? "Stop" : "Start";
+			};
+			reset.Click += delegate {
+				chrono.Reset();
+				startStop.Text = "Start";
+				UpdateTextField();
+			};
+
+			chrono.Timer.Elapsed += (sender, e) => RunOnUiThread(() => UpdateTextField());
 
 			sharedPreferences = GetPreferences (FileCreationMode.Private);
 		}
 
-		void toggleState ()
-		{
-			if (isTicking) {
-				stopCounting ();
-			} else {
-				startCounting ();
-			}
+		void InitUIReferences () {
+			timeView = FindViewById<TextView> (Resource.Id.timeView);
+			startStop = FindViewById<Button> (Resource.Id.startStopButton);
+			reset = FindViewById<Button> (Resource.Id.resetButton);
 		}
 
-		private void startCounting() {
-			if (pauseTime != null) {
-				TimeSpan diff = DateTime.Now.Subtract (pauseTime.Value);
-				startTime = startTime.Value.Add (diff);
-				pauseTime = null;
-			} else {
-				startTime = DateTime.Now;
-			}
-			calculateDuration = durationWhenTicking;
-			OnTick();
-
-			startStop.Text = Resources.GetText(Resource.String.stop);
-		}
-
-		private void stopCounting() {
-			calculateDuration = durationWhenPaused;
-			pauseTime = DateTime.Now;
-
-			startStop.Text = Resources.GetText(Resource.String.start);
-			handler.RemoveCallbacksAndMessages(null);
-		}
-
-		private void ResetTimer() {
-			startTime = null;
-			pauseTime = null;
-			calculateDuration = zeroDuration;
-			UpdateTextField ();
-
-			startStop.Text = Resources.GetText(Resource.String.start);
-		}
 
 		void UpdateTextField ()
 		{
-			TimeSpan interval = calculateDuration();
-			timeView.Text = $"{interval.Hours.ToString()}:{interval.Minutes.ToString()}:{interval.Seconds.ToString()}:{interval.Milliseconds.ToString()}";
+			timeView.Text = chrono.Time.ToString(@"hh\:mm\:ss\:fff");
 		}
-
-		private void GenerateDelayedTick() {
-			handler.PostDelayed(OnTick, 100);
-		}
-
-		private void OnTick()
-		{
-			UpdateTextField();
-
-			// Have the next tick generated in 100ms
-			GenerateDelayedTick();
-		}
-
-		private TimeSpan durationWhenTicking() {
-			return DateTime.Now.Subtract (startTime.Value);
-		}
-
-		private TimeSpan durationWhenPaused() {
-			return pauseTime.Value.Subtract (startTime.Value);
-		}
-
+			
 		protected override void OnPause () {
 			base.OnPause ();
 			ISharedPreferencesEditor editor = sharedPreferences.Edit ();
-			if (startTime == null) {
+			if (chrono.StartTime == null) {
 				editor.Remove ("start");
 			} else {
-				editor.PutLong ("start", startTime.Value.ToBinary());
+				editor.PutLong ("start", chrono.StartTime.Value.ToBinary());
 			}
 
-			if (pauseTime == null) {
+			if (chrono.PauseTime == null) {
 				editor.Remove ("pause");
 			} else {
-				editor.PutLong ("pause", pauseTime.Value.ToBinary());
+				editor.PutLong ("pause", chrono.PauseTime.Value.ToBinary());
 			}
 			editor.Commit ();
+			chrono.Timer.Stop ();
 		}
 
 		protected override void OnResume () {
 			base.OnResume ();
-			if (sharedPreferences.Contains ("start"))
-				startTime = DateTime.FromBinary (sharedPreferences.GetLong ("start", DateTime.Now.ToBinary ()));
-			else
-				startTime = null;
-			if (sharedPreferences.Contains ("pause"))
-				pauseTime = DateTime.FromBinary (sharedPreferences.GetLong ("pause", DateTime.Now.ToBinary ()));
-			else
-				pauseTime = null;
-			OnTick ();
 
-			if (pauseTime != null)
-				calculateDuration = durationWhenPaused;
-			else if (startTime != null)
-				calculateDuration = durationWhenTicking;
-			else
-				calculateDuration = zeroDuration;
+			DateTime? start = null, pause = null;
+
+			if (sharedPreferences.Contains ("start"))
+				start = DateTime.FromBinary (sharedPreferences.GetLong ("start", DateTime.Now.ToBinary ()));
+			if (sharedPreferences.Contains ("pause"))
+				pause = DateTime.FromBinary (sharedPreferences.GetLong ("pause", DateTime.Now.ToBinary ()));
+
+			chrono.importStartPauseTimes (start, pause);
+
+			UpdateTextField ();
 		}
 	}
 }

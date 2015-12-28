@@ -1,0 +1,14 @@
+﻿```xml
+<Manifest>
+  <AgentType>iOSUnified_UIKit</AgentType>
+  <Resources />
+  <TimeoutSeconds>0</TimeoutSeconds>
+</Manifest>
+```
+```csharp
+// Sketch your next great idea!
+
+TimeSpan t = new TimeSpan(510000000);
+t.ToString(@"hh\:mm\:ss\:fff")
+```
+

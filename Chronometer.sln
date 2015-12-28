@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronometer", "Chronometer\Chronometer.csproj", "{821ED8E2-8E71-4F0F-804B-174C9FE69D60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Droid", "Chronometer\Droid.csproj", "{821ED8E2-8E71-4F0F-804B-174C9FE69D60}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronometer.UITests", "Chronometer.UITests\Chronometer.UITests.csproj", "{9105B5FA-810C-42C6-8938-CBDCE4CCB0C4}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Core", "Core\Core.shproj", "{F3DE6C1B-EFA2-4D79-849F-0CE7F578B48C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
